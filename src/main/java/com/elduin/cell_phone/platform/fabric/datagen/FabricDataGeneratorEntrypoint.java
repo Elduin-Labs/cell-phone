@@ -3,18 +3,13 @@ package com.elduin.cell_phone.platform.fabric.datagen;
 //? fabric {
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-//? != 1.19.2 {
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-//?}
 
+// The build lists this entrypoint for every mod. The phone's recipe is a plain
+// JSON file, so there is nothing to generate.
 public class FabricDataGeneratorEntrypoint implements DataGeneratorEntrypoint {
 
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator generator) {
-		//? != 1.19.2 {
-		final FabricDataGenerator.Pack pack = generator.createPack();
-		pack.addProvider((FabricDataOutput output) -> new ModRecipeProvider(output, generator.getRegistries()));
-		//?}
 	}
 
 }

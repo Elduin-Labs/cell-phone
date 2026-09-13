@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "GG",
+    "RR",
+    "II"
+  ],
+  "key": {
+    "G": "minecraft:glass_pane",
+    "R": "minecraft:redstone",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "cell_phone:cell_phone",
+    "count": 1
+  }
+}

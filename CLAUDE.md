@@ -22,6 +22,24 @@ The mod id is baked into save files. Once a world has been played with this mod,
 **changing the mod id breaks that world.** Rename the display name freely;
 never rename the mod id.
 
+## How the phone works
+
+Everything interesting is client-side, in `src/main/java/com/elduin/cell_phone/client/`.
+The server only registers the item; there is no networking.
+
+    PhoneClient    when calls happen (first one 20s after you carry a phone, then every 1.5-4 min)
+                   and who calls (a real villager within 96 blocks, else a random job)
+    Call           one call: ringing, dialling, talking, asking, ended; plays the villager sounds
+    Scripts        every conversation, per profession, plus kid villagers. Add calls here.
+    CallScreen     the in-call phone screen: bubbles with the hmms and the real words
+    PhoneScreen    recent calls with Call buttons
+    PhoneFrame     the phone body, clock, signal bars, pixel villager face
+    Draw           GuiGraphics (1.21.11) vs GuiGraphicsExtractor (26.2) in one place
+    ClientCompat   other client calls that moved in 26 (screen, action bar, time of day)
+
+The voices are Mojang's own villager sounds (`SoundEvents.VILLAGER_*`), played
+with one pitch per caller. No custom sounds ship with the mod.
+
 ## Layout
 
 Multi-version is handled by [Stonecutter](https://plugins.gradle.org/plugin/dev.kikugie.stonecutter):

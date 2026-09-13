@@ -1,5 +1,5 @@
 {
-  "package": "com.example.modtemplate.mixin",
+  "package": "com.elduin.cell_phone.mixin",
   "required": true,
   "minVersion": "0.8",
   "compatibilityLevel": "${java}",

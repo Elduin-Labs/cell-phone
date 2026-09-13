@@ -1,12 +1,12 @@
-package com.example.modtemplate;
+package com.elduin.cell_phone;
 
-import com.example.modtemplate.platform.Platform;
+import com.elduin.cell_phone.platform.Platform;
 
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.example.modtemplate.platform.fabric.FabricPlatform;
+import com.elduin.cell_phone.platform.fabric.FabricPlatform;
 
 @SuppressWarnings("LoggingSimilarMessage")
 public class ModTemplate {

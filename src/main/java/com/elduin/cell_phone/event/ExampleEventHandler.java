@@ -1,6 +1,6 @@
-package com.example.modtemplate.event;
+package com.elduin.cell_phone.event;
 
-import com.example.modtemplate.ModTemplate;
+import com.elduin.cell_phone.ModTemplate;
 import net.minecraft.server.level.ServerPlayer;
 
 public class ExampleEventHandler {

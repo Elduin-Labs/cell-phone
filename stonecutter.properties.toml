@@ -1,29 +1,28 @@
 loomx.loom_version="1.16-SNAPSHOT"
 
-mod.id = "modtemplate"
-mod.name = "Mod Template"
-mod.group = "com.example"
+
+mod.id = "cell_phone"
+mod.name = "Cell Phone"
+mod.group = "com.elduin"
 mod.version = "1.0.0"
 mod.channel_tag = ""
-mod.description = "Example Description"
+mod.description = "A cell phone. Villagers call you, and when you pick up they talk in villager hmms, with the real words written on the screen."
 mod.authors = ["Elduin"]
 mod.contributors = []
 mod.inception_year = "2026"
 mod.license.name = "MIT"
 mod.license.url = "https://opensource.org/licenses/MIT"
 mod.license.dist = "repo"
-mod.environment = "client_and_server"
-mod.sources_url = "https://github.com/Elduin-Labs/mod-template"
-mod.homepage_url = "https://github.com/Elduin-Labs/mod-template"
-mod.issues_url = "https://github.com/Elduin-Labs/mod-template/issues"
+mod.sources_url = "https://github.com/Elduin-Labs/cell-phone"
+mod.homepage_url = "https://github.com/Elduin-Labs/cell-phone"
+mod.issues_url = "https://github.com/Elduin-Labs/cell-phone/issues"
 mod.discord_url = ""
-
+mod.environment = "client_and_server"
 [[mod.pom.developers]]
 id = "elduin"
 name = "Elduin"
-url = "https://github.com/Elduin-Labs"
+url = "https://github.com/ghost"
 
-# KEEP IN SYNC with the version list in settings.gradle.kts.
 [fabric]
 deps.fabric-loader = "0.19.5"
 
@@ -34,5 +33,5 @@ deps.modmenu = "17.0.1-beta.1"
 
 [fabric."26.2"]
 deps.minecraft = "26.2"
-deps.fabric-api = "0.158.0+26.2"
-deps.modmenu = "20.0.1"
+deps.fabric-api = "0.160.0+26.2"
+deps.modmenu = "20.0.2"

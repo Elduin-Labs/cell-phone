@@ -1,4 +1,4 @@
-package com.example.modtemplate.platform.fabric.datagen;
+package com.elduin.cell_phone.platform.fabric.datagen;
 
 //? fabric {
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;

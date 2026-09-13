@@ -1,5 +1,5 @@
 .env
-.gradle
+.gradle*/
 .kotlin
 .cache/
 build/
@@ -7,7 +7,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-run/
+run*/
+/libs/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

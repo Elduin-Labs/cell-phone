@@ -15,7 +15,7 @@ work with Elduin live in `~/.claude/CLAUDE.md`.
     package           com.elduin.cell_phone
     loader            fabric                (only fabric — see below)
     minecraft         1.21.11, 26.2
-    primary version   1.21.11               (the one he plays)
+    primary version   26.2                  (the one he plays, with Replay Mod)
     java              21 for 1.21.x, 25 for 26.x — Gradle picks this per version
 
 The mod id is baked into save files. Once a world has been played with this mod,

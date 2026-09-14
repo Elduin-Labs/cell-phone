@@ -43,7 +43,7 @@ sealed class Loader(val id: String) {
 					}
 				},
 				description = ctx.description,
-				icon = "assets/icon.png",
+				icon = "assets/${ctx.modId}/icon.png",
 				license = ctx.licenseName,
 				environment = when (ctx.environment) {
 					ModrinthEnvironment.CLIENT_ONLY, ModrinthEnvironment.SINGLEPLAYER_ONLY -> "client"
@@ -108,7 +108,7 @@ sealed class Loader(val id: String) {
 						version = ctx.baseVersion,
 						displayURL = ctx.homepageUrl,
 						modUrl = ctx.homepageUrl,
-						logoFile = "assets/icon.png",
+						logoFile = "assets/${ctx.modId}/icon.png",
 						authors = ctx.authors.joinToString(", "),
 						credits = "${ctx.authors.joinToString(", ")} Contributors: ${ctx.contributors.joinToString(", ")}",
 						description = ctx.description

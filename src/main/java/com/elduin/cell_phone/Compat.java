@@ -1,10 +1,10 @@
 package com.elduin.cell_phone;
 
 //? if >=26 {
-import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
-//? } else {
-/*import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-*///? }
+/*import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+*///? } else {
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+//? }
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
@@ -22,9 +22,9 @@ public final class Compat {
 	/** Fabric renamed its creative-tab events in 26. */
 	public static void addToCreativeTab(ResourceKey<CreativeModeTab> tab, Item item) {
 		//? if >=26 {
-		CreativeModeTabEvents.modifyOutputEvent(tab).register(output -> output.accept(item));
-		//? } else {
-		/*ItemGroupEvents.modifyEntriesEvent(tab).register(entries -> entries.accept(item));
-		*///? }
+		/*CreativeModeTabEvents.modifyOutputEvent(tab).register(output -> output.accept(item));
+		*///? } else {
+		ItemGroupEvents.modifyEntriesEvent(tab).register(entries -> entries.accept(item));
+		//? }
 	}
 }

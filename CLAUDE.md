@@ -116,3 +116,9 @@ Handled by the **share-it** skill. Short version: bump `mod.version` in
 `stonecutter.properties.toml`, update `CHANGELOG.md` in plain words, push a
 `v<version>` tag, and the workflow publishes to Modrinth using the org's
 `MODRINTH_TOKEN`.
+
+The README has **Download** buttons that link straight to the jars on the
+GitHub Release. Jar names contain the version, so after every release update
+those links in `README.md` to the new tag and file names.
+
+This mod is on GitHub Releases only so far. There is no Modrinth project yet.

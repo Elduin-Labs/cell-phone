@@ -1,10 +1,10 @@
 package com.elduin.cell_phone.client;
 
 //? if >=26 {
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-//? } else {
-/*import net.minecraft.client.gui.GuiGraphics;
-*///? }
+/*import net.minecraft.client.gui.GuiGraphicsExtractor;
+*///? } else {
+import net.minecraft.client.gui.GuiGraphics;
+//? }
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
@@ -19,18 +19,18 @@ import net.minecraft.util.FormattedCharSequence;
 final class Draw {
 
 	//? if >=26 {
-	private final GuiGraphicsExtractor g;
+	/*private final GuiGraphicsExtractor g;
 
 	Draw(GuiGraphicsExtractor g) {
 		this.g = g;
 	}
-	//? } else {
-	/*private final GuiGraphics g;
+	*///? } else {
+	private final GuiGraphics g;
 
 	Draw(GuiGraphics g) {
 		this.g = g;
 	}
-	*///? }
+	//? }
 
 	void fill(int x1, int y1, int x2, int y2, int color) {
 		g.fill(x1, y1, x2, y2, color);
@@ -44,18 +44,18 @@ final class Draw {
 
 	void text(Font font, Component text, int x, int y, int color, boolean shadow) {
 		//? if >=26 {
-		g.text(font, text, x, y, color, shadow);
-		//? } else {
-		/*g.drawString(font, text, x, y, color, shadow);
-		*///? }
+		/*g.text(font, text, x, y, color, shadow);
+		*///? } else {
+		g.drawString(font, text, x, y, color, shadow);
+		//? }
 	}
 
 	void text(Font font, FormattedCharSequence text, int x, int y, int color, boolean shadow) {
 		//? if >=26 {
-		g.text(font, text, x, y, color, shadow);
-		//? } else {
-		/*g.drawString(font, text, x, y, color, shadow);
-		*///? }
+		/*g.text(font, text, x, y, color, shadow);
+		*///? } else {
+		g.drawString(font, text, x, y, color, shadow);
+		//? }
 	}
 
 	void centered(Font font, Component text, int centerX, int y, int color) {

@@ -36,6 +36,16 @@ The server only registers the item; there is no networking.
     PhoneFrame     the phone body, clock, signal bars, pixel villager face
     Draw           GuiGraphics (1.21.11) vs GuiGraphicsExtractor (26.2) in one place
     ClientCompat   other client calls that moved in 26 (screen, action bar, time of day)
+    Replies        what villagers say when you talk out loud; yes/no word matching
+    PhoneConfig    config/cell_phone.properties (microphone on/off, sensitivity, whisper paths)
+    voice/Microphone   OpenAL capture during a call; cuts a clip each time you stop talking.
+                       Muted while the villager's hmms play so it doesn't hear itself.
+    voice/Transcriber  runs whisper.cpp's `whisper-cli` locally on the clip. No network.
+
+Talking out loud needs `whisper-cli` (Homebrew `whisper-cpp`) and a ggml model
+in `config/cell_phone/`. Without them the villager still notices you talked and
+says the signal is bad. Elduin's 26.2 instance has `ggml-base.en.bin` copied in.
+On macOS the first call asks for microphone permission for the Modrinth App.
 
 The voices are Mojang's own villager sounds (`SoundEvents.VILLAGER_*`), played
 with one pitch per caller. No custom sounds ship with the mod.

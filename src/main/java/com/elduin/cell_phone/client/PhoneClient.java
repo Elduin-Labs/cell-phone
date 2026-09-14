@@ -2,6 +2,8 @@ package com.elduin.cell_phone.client;
 
 import com.elduin.cell_phone.CellPhoneItem;
 import com.elduin.cell_phone.PhoneItems;
+import com.elduin.cell_phone.client.voice.Microphone;
+import com.elduin.cell_phone.client.voice.Transcriber;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.ChatFormatting;
@@ -27,18 +29,25 @@ public final class PhoneClient {
 	private static final Random RANDOM = new Random();
 
 	/** The call that is ringing, dialling or talking. Null when the phone is quiet. */
-	private static Call active;
+	private static volatile Call active;
 	private static int ticksUntilCall = -1;
+	static PhoneConfig config;
 
 	private PhoneClient() {
 	}
 
 	public static void register() {
+		config = PhoneConfig.load();
 		CellPhoneItem.openOnClient = player -> openPhone(Minecraft.getInstance());
 		ClientTickEvents.END_CLIENT_TICK.register(PhoneClient::tick);
 	}
 
 	private static void tick(Minecraft mc) {
+		tickCalls(mc);
+		tickMicrophone();
+	}
+
+	private static void tickCalls(Minecraft mc) {
 		if (mc.player == null || mc.level == null) {
 			// Left the world. Hang everything up and start fresh next time.
 			active = null;
@@ -81,6 +90,35 @@ public final class PhoneClient {
 		if (ClientCompat.screen(mc) instanceof PhoneScreen) {
 			ClientCompat.setScreen(mc, new CallScreen(active));
 		}
+	}
+
+	/** The microphone is on only while you're connected to someone, and deaf while they talk. */
+	private static void tickMicrophone() {
+		Call call = active;
+		if (call == null || !call.isConnected() || !config.microphone) {
+			Microphone.stop();
+			return;
+		}
+		Microphone.listen(PhoneClient::heardSomething, config.sensitivity);
+		Microphone.setMuted(call.villagerSpeaking() || Transcriber.busy());
+	}
+
+	/** Runs on the microphone thread with one thing you said. */
+	private static void heardSomething(short[] clip) {
+		Call call = active;
+		if (call == null) {
+			return;
+		}
+		Transcriber.transcribe(clip, config.whisper, config.model, PhoneConfig.modelFolder(), words -> {
+			if (words != null && words.isEmpty()) {
+				return;
+			}
+			Minecraft.getInstance().execute(() -> {
+				if (active == call) {
+					call.hear(words);
+				}
+			});
+		});
 	}
 
 	/** Right-clicking the phone. */

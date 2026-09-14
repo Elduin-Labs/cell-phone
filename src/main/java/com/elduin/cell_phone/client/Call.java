@@ -60,6 +60,9 @@ final class Call {
 	private int nextLineIn;
 	private boolean asked;
 	private boolean answered;
+	/** Call-timer tick when the villager's last hmm finishes. The mic ignores you until then. */
+	private int speakingUntil;
+	private boolean saidSignalIsBad;
 
 	private Call(Caller caller, Script script, boolean outgoing) {
 		this.caller = caller;
@@ -78,6 +81,19 @@ final class Call {
 
 	boolean isOver() {
 		return state == State.ENDED;
+	}
+
+	/** Someone picked up and nobody has hung up. This is when the microphone is on. */
+	boolean isConnected() {
+		return state == State.TALKING || state == State.ASKING;
+	}
+
+	/**
+	 * True while the villager's voice is coming out of the speakers, so the microphone doesn't
+	 * hear the villager and think it was you.
+	 */
+	boolean villagerSpeaking() {
+		return talkTicks < speakingUntil;
 	}
 
 	/** Runs once per game tick for as long as the call exists. */
@@ -138,16 +154,85 @@ final class Call {
 		}
 	}
 
-	/** Your reply to the villager's question. */
+	/** Your reply to the villager's question, from the Yes and No buttons. */
 	void reply(boolean yes) {
+		reply(yes, yes ? "Yes!" : "No.");
+	}
+
+	private void reply(boolean yes, String yourWords) {
 		if (state != State.ASKING) {
 			return;
 		}
 		answered = true;
-		bubbles.add(new Bubble(Who.YOU, yes ? "Yes!" : "No.", null));
+		bubbles.add(new Bubble(Who.YOU, yourWords, null));
 		queue.addAll(yes ? script.ifYes() : script.ifNo());
 		nextLineIn = 20;
 		setState(State.TALKING);
+	}
+
+	/**
+	 * You said something out loud. words is what whisper made of it, or null if this computer
+	 * can't turn voices into words — then the villager knows you talked, but not what you said.
+	 */
+	void hear(String words) {
+		if (!isConnected()) {
+			return;
+		}
+		if (words == null) {
+			bubbles.add(new Bubble(Who.YOU, "(you talked)", null));
+			if (!saidSignalIsBad) {
+				saidSignalIsBad = true;
+				Script.Line line = Script.no("Hrmm? The signal is bad. I only hear hmms.");
+				if (state == State.ASKING) {
+					say(line);
+				} else {
+					interrupt(new Replies.Reaction(List.of(line), false));
+				}
+			}
+			return;
+		}
+		String yourWords = capitalise(words);
+		if (state == State.ASKING) {
+			switch (Replies.yesOrNo(words)) {
+				case YES -> reply(true, yourWords);
+				case NO -> reply(false, yourWords);
+				case UNSURE -> {
+					bubbles.add(new Bubble(Who.YOU, yourWords, null));
+					Replies.Reaction reaction = Replies.reactTo(words, caller, random);
+					if (reaction.hangUp()) {
+						// Saying goodbye instead of answering is an answer too.
+						setState(State.TALKING);
+						interrupt(reaction);
+					} else {
+						say(Script.hmm("Hmm? Is that a yes or a no?"));
+					}
+				}
+			}
+			return;
+		}
+		bubbles.add(new Bubble(Who.YOU, yourWords, null));
+		interrupt(Replies.reactTo(words, caller, random));
+	}
+
+	/** The villager answers you as soon as they finish the line they're on, then carries on. */
+	private void interrupt(Replies.Reaction reaction) {
+		if (reaction.hangUp()) {
+			queue.clear();
+			asked = true;
+			answered = true;
+		}
+		List<Script.Line> lines = reaction.lines();
+		for (int i = lines.size() - 1; i >= 0; i--) {
+			queue.addFirst(lines.get(i));
+		}
+		if (state == State.TALKING) {
+			nextLineIn = Math.min(nextLineIn, 20);
+		}
+	}
+
+	private static String capitalise(String words) {
+		String trimmed = words.length() > 120 ? words.substring(0, 117) + "..." : words;
+		return Character.toUpperCase(trimmed.charAt(0)) + trimmed.substring(1);
 	}
 
 	/** The red button, or closing the phone mid-call. */
@@ -175,6 +260,8 @@ final class Call {
 			SoundEvent sound = i == count - 1 ? line.mood().sound : SoundEvents.VILLAGER_AMBIENT;
 			hmms.add(new Hmm(talkTicks + i * HMM_GAP_TICKS, sound));
 		}
+		// A villager sound lasts about a second; leave that long after the last one starts.
+		speakingUntil = Math.max(speakingUntil, talkTicks + (count - 1) * HMM_GAP_TICKS + 22);
 		nextLineIn = line.readingTicks();
 	}
 

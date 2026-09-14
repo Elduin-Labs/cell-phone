@@ -1,5 +1,8 @@
 package com.elduin.cell_phone.client;
 
+import com.elduin.cell_phone.client.voice.Microphone;
+import com.elduin.cell_phone.client.voice.Transcriber;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -102,7 +105,52 @@ class CallScreen extends PhoneFrame {
 		d.text(this.font, Component.literal(status), sx1 + 38, top + 17, GREY, false);
 		d.fill(sx1 + 6, top + 34, sx2 - 6, top + 35, 0xFF2E3747);
 
-		drawBubbles(d, top + 40, sy2 - 36);
+		if (call.isConnected() && PhoneClient.config.microphone) {
+			drawMicrophone(d, sy2 - 46);
+			drawBubbles(d, top + 40, sy2 - 52);
+		} else {
+			drawBubbles(d, top + 40, sy2 - 36);
+		}
+	}
+
+	/** A little mic, a loudness bar, and what the phone is doing with your voice. */
+	private void drawMicrophone(Draw d, int y) {
+		int x = sx1 + 10;
+		Microphone.Status status = Microphone.status();
+		boolean live = status == Microphone.Status.LISTENING || status == Microphone.Status.HEARING;
+		boolean hearing = status == Microphone.Status.HEARING && !Microphone.isMuted();
+		int micColor = hearing ? 0xFF34C759 : live ? WHITE : GREY;
+
+		// Pixel microphone: head, stand, base.
+		d.round(x + 2, y, x + 7, y + 6, micColor);
+		d.fill(x + 4, y + 6, x + 5, y + 8, micColor);
+		d.fill(x + 2, y + 8, x + 7, y + 9, micColor);
+
+		String text;
+		if (Transcriber.busy()) {
+			text = "Thinking...";
+		} else if (status == Microphone.Status.MISSING) {
+			text = "No microphone found";
+		} else if (status == Microphone.Status.BLOCKED) {
+			text = "Mic blocked in Settings";
+		} else if (call.villagerSpeaking()) {
+			text = "They're talking...";
+		} else if (hearing) {
+			text = "Hearing you...";
+		} else if (call.state == Call.State.ASKING) {
+			text = "Say yes or no!";
+		} else {
+			text = "Talk to them!";
+		}
+		d.text(this.font, Component.literal(text), x + 12, y + 1, micColor, false);
+
+		if (live) {
+			int barX2 = sx2 - 10;
+			int barX1 = barX2 - 30;
+			d.fill(barX1, y + 3, barX2, y + 6, 0xFF2E3747);
+			float loud = Microphone.isMuted() ? 0 : Math.min(1f, Microphone.level() * 12f);
+			d.fill(barX1, y + 3, barX1 + Math.round(30 * loud), y + 6, 0xFF34C759);
+		}
 	}
 
 	/** Newest at the bottom, working upwards until there is no room left. */

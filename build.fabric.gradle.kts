@@ -27,7 +27,9 @@ platform {
 			fabricLikeVersionRange = ">=${prop("deps.fabric-api")}"
 		}
 		required("fabricloader") {
-			fabricLikeVersionRange = ">=${prop("deps.fabric-loader")}"
+			// Not deps.fabric-loader: that is the loader we build against, and asking players for
+			// it locked out anyone on an older loader that runs the mod fine.
+			fabricLikeVersionRange = ">=${prop("deps.fabric-loader-min")}"
 		}
 		optional("modmenu") {}
 	}

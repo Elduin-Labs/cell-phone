@@ -4,7 +4,7 @@ loomx.loom_version="1.16-SNAPSHOT"
 mod.id = "cell_phone"
 mod.name = "Cell Phone"
 mod.group = "com.elduin"
-mod.version = "1.0.0"
+mod.version = "1.1.0"
 mod.channel_tag = ""
 mod.description = "A cell phone. Villagers call you, and when you pick up they talk in villager hmms, with the real words written on the screen."
 mod.authors = ["Elduin"]
@@ -28,10 +28,14 @@ deps.fabric-loader = "0.19.5"
 
 [fabric."1.21.11"]
 deps.minecraft = "1.21.11"
+# The oldest Fabric Loader players can have. This is what Fabric API itself asks
+# for, so the mod never demands a newer loader than its one dependency does.
+deps.fabric-loader-min = "0.17.3"
 deps.fabric-api = "0.141.6+1.21.11"
 deps.modmenu = "17.0.1-beta.1"
 
 [fabric."26.2"]
 deps.minecraft = "26.2"
+deps.fabric-loader-min = "0.18.4"
 deps.fabric-api = "0.160.0+26.2"
 deps.modmenu = "20.0.2"

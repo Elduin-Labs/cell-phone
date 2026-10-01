@@ -24,7 +24,7 @@ name = "Elduin"
 url = "https://github.com/ghost"
 
 [fabric]
-deps.fabric-loader = "0.19.5"
+deps.fabric-loader = "0.19.3"
 
 [fabric."1.21.11"]
 deps.minecraft = "1.21.11"
